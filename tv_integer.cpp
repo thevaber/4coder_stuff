@@ -498,7 +498,7 @@ CUSTOM_COMMAND_SIG(integer_add_interactive)
 CUSTOM_DOC("Interactively add number to integer literal under cursor")
 {
     i64 x;
-    if (tv__query_user_integer(app, string_u8_litexpr("Add number: "), &x)) {
+    if (tv__query_user_integer(app, string_u8_litexpr("Add: "), &x)) {
         tv_integer_literal_adjust(app, TV_Integer_Literal_Adjust__Add, x);
     }
 }
@@ -507,7 +507,7 @@ CUSTOM_COMMAND_SIG(integer_subtract_interactive)
 CUSTOM_DOC("Interactively subtract number from integer literal under cursor")
 {
     i64 x;
-    if (tv__query_user_integer(app, string_u8_litexpr("Subtract number: "), &x)) {
+    if (tv__query_user_integer(app, string_u8_litexpr("Subtract: "), &x)) {
         tv_integer_literal_adjust(app, TV_Integer_Literal_Adjust__Subtract, x);
     }
 }
@@ -516,7 +516,7 @@ CUSTOM_COMMAND_SIG(integer_multiply_interactive)
 CUSTOM_DOC("Interactively multiply integer literal under cursor by number")
 {
     i64 x;
-    if (tv__query_user_integer(app, string_u8_litexpr("Multiply number: "), &x)) {
+    if (tv__query_user_integer(app, string_u8_litexpr("Multiply by: "), &x)) {
         tv_integer_literal_adjust(app, TV_Integer_Literal_Adjust__Multiply, x);
     }
 }
@@ -525,7 +525,7 @@ CUSTOM_COMMAND_SIG(integer_divide_interactive)
 CUSTOM_DOC("Interactively divide integer literal under cursor by number")
 {
     i64 x;
-    if (tv__query_user_integer(app, string_u8_litexpr("Divide number: "), &x)) {
+    if (tv__query_user_integer(app, string_u8_litexpr("Divide by: "), &x)) {
         tv_integer_literal_adjust(app, TV_Integer_Literal_Adjust__Divide, x);
     }
 }
@@ -534,7 +534,7 @@ CUSTOM_COMMAND_SIG(integer_mod_interactive)
 CUSTOM_DOC("Interactively mod integer literal under cursor by number")
 {
     i64 x;
-    if (tv__query_user_integer(app, string_u8_litexpr("Mod number: "), &x)) {
+    if (tv__query_user_integer(app, string_u8_litexpr("Mod by: "), &x)) {
         tv_integer_literal_adjust(app, TV_Integer_Literal_Adjust__Mod, x);
     }
 }
