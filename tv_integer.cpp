@@ -1,7 +1,7 @@
 // Commands/utilities for working with integer literals
 //  - Adjusting (doing math on) integer literals in any C/C++ number base/radix, including 0b1010 binary
 //    - Increment, decrement, +, -, *, /, %
-//  - Cycling through number bases (eg. 10 -> 0xA -> 0x1010 -> 012 -> 10 -> ...)
+//  - Cycling through number bases (eg. 10 -> 0xA -> 0b1010 -> 012 -> 10 -> ...)
 //  - Some utility functions for work with C/C++ integer literals
 
 ///////////////
