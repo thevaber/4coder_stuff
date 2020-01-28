@@ -4,6 +4,8 @@
 //  - Cycling through number bases (eg. 10 -> 0xA -> 0b1010 -> 012 -> 10 -> ...)
 //  - Some utility functions for work with C/C++ integer literals
 
+#define TV_4CODER_HAS_INTEGER_CPP 1
+
 ///////////////
 // Config
 
