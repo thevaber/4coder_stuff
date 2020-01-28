@@ -1,3 +1,8 @@
+/// Commands:
+//     if0_toggle        - Toggle surrounding #if 0/#if 1 block
+//     if0_toggle_or_off - Toggle surrounding #if 0/#if 1 block, or surround the range between the cursor and mark with an '#if 0'
+//                          and add an '#endif'
+
 #if !TV_4CODER_HAS_UTILS_CPP
 #error Must include tv_utils.cpp before tv_if0.cpp
 #endif
@@ -166,8 +171,10 @@ tv_draw_if0_fade(Application_Links* app, Buffer_ID buffer, View_ID view,
     }
 }
 
-CUSTOM_COMMAND_SIG(if0_toggle)
-CUSTOM_DOC("Toggle #if 0")
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function b32
+tv_if0_toggle(Application_Links* app)
 {
     View_ID view = get_active_view(app, Access_ReadVisible);
     Buffer_ID buffer = view_get_buffer(app, view, Access_ReadVisible);
@@ -175,11 +182,11 @@ CUSTOM_DOC("Toggle #if 0")
 
     Token_Array tokens = get_token_array_from_buffer(app, buffer);
     if (tokens.tokens == 0) {
-        return;
+        return false;
     }
 
     Token* tok = token_from_pos(&tokens, pos);
-    
+
     if (tok && tok->sub_kind == TokenCppKind_PPEndIf) {
         tok = tv__token_dec(&tokens, tok); // work properly if cursor is over #endif
     }
@@ -209,7 +216,7 @@ CUSTOM_DOC("Toggle #if 0")
         tok = tv__token_dec(&tokens, tok);
     }
     if (!tok_number) {
-        return;
+        return false;
     }
 
     // scan downwards for #endif
@@ -223,13 +230,13 @@ CUSTOM_DOC("Toggle #if 0")
             level++;
         } else if (tok->sub_kind == TokenCppKind_PPElIf) {
             if (level == 0 && tok->pos <= pos) {
-                return; // #if 0 which contains #elif, and the cursor is in/after the #elif -> better don't do anything
+                return false; // #if 0 which contains #elif, and the cursor is in/after the #elif -> better don't do anything
             }
         } else if (tok->sub_kind == TokenCppKind_PPEndIf) {
             if (level > 0) {
                 level--;
             } else {
-                i64 end = tok->pos + tok->size;                
+                i64 end = tok->pos + tok->size;
                 if (pos >= start && pos <= end) { // check if cursor is actually over this #if 0..#endif
                     String_Const_u8 replacement;
                     if (x == 0) {
@@ -238,11 +245,29 @@ CUSTOM_DOC("Toggle #if 0")
                         replacement = string_u8_litexpr("0");
                     }
                     buffer_replace_range(app, buffer, Ii64_size(tok_number->pos, tok_number->size), replacement);
-                }                
-                return;
+                }
+                return true;
             }
         }
-        
+
         tok = tv__token_inc(&tokens, tok);
+    }
+
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CUSTOM_COMMAND_SIG(if0_toggle)
+CUSTOM_DOC("Toggle surrounding #if 0/#if 1 block")
+{
+    tv_if0_toggle(app);
+}
+
+CUSTOM_COMMAND_SIG(if0_toggle_or_off)
+CUSTOM_DOC("Toggle surrounding #if 0/#if 1 block, or surround the range between the cursor and mark with an '#if 0' and add an '#endif'")
+{
+    if (!tv_if0_toggle(app)) {
+        if0_off(app);
     }
 }
